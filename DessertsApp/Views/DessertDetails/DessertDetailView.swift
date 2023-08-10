@@ -11,18 +11,10 @@ struct DessertDetailView: View {
 
     var body: some View {
         NavigationView {
-            if viewModel.loading {
-                DessertDetailLoadingView()
-                    .padding(.horizontal)
-                    .background(Color.background)
-                    .toolbar { ToolbarItem { toolbarCloseButton } }
-            } else if viewModel.hasError {
-                ErrorView(retryCallback: { viewModel.fetchDessertDetails() })
-                    .toolbar { ToolbarItem { toolbarCloseButton } }
-            } else {
+            ZStack {
+                Color.background.ignoresSafeArea()
                 content
                     .padding(.horizontal)
-                    .background(Color.background)
                     .toolbar { ToolbarItem { toolbarCloseButton } }
             }
         }
@@ -30,8 +22,19 @@ struct DessertDetailView: View {
 
     @ViewBuilder
     private var content: some View {
+        if viewModel.loading {
+            loading
+        } else if viewModel.hasError {
+            error
+        } else {
+            main
+        }
+    }
+
+    @ViewBuilder
+    private var main: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: Spacing.spacing10x) {
                 thumbnailImage
                 dessertNameText
                 tagList
@@ -47,9 +50,9 @@ struct DessertDetailView: View {
             Spacer()
             CachedAsyncImage(urlString: viewModel.dessert?.thumbnail.absoluteString ?? "")
                 .scaledToFit()
-                .frame(height: 350)
-                .cornerRadius(20)
-                .shadow(color: Color.subtext.opacity(0.2), radius: 5, x: 0, y: 2)
+                .frame(height: Sizing.sizing175x)
+                .cornerRadius(Radius.image)
+                .shadow(color: Color.subtext.opacity(0.2), radius: Radius.shadow, x: 0, y: 2)
             Spacer()
         }
     }
@@ -68,11 +71,10 @@ struct DessertDetailView: View {
             if let tags = viewModel.dessert?.tags {
                 ForEach(tags, id: \.self) { tag in
                     Text(tag)
-                        .font(.body)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(Color.secondary.opacity(0.3))
-                        .cornerRadius(15)
+                        .padding(.horizontal, Spacing.spacing5x)
+                        .padding(.vertical, Spacing.spacing3x)
+                        .background(Color.subtext.opacity(0.3))
+                        .cornerRadius(Radius.pill)
                         .foregroundColor(Color.highlight)
                 }
             }
@@ -81,7 +83,7 @@ struct DessertDetailView: View {
 
     @ViewBuilder
     private var ingredientsAndMeasuresList: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: Spacing.spacing5x) {
             Text("Ingredients")
                 .font(.title2)
                 .fontWeight(.bold)
@@ -98,7 +100,7 @@ struct DessertDetailView: View {
 
     @ViewBuilder
     private var instructions: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: Spacing.spacing5x) {
             Text("Instructions")
                 .font(.title2)
                 .fontWeight(.bold)
@@ -106,7 +108,7 @@ struct DessertDetailView: View {
 
             Text(viewModel.dessert?.instructions ?? "")
                 .foregroundColor(Color.text)
-                .lineSpacing(5)
+                .lineSpacing(Spacing.spacing3x)
                 .multilineTextAlignment(.leading)
         }
     }
@@ -121,6 +123,16 @@ struct DessertDetailView: View {
                 .fontWeight(.bold)
                 .foregroundColor(Color.subtext)
         }
+    }
+
+    @ViewBuilder
+    private var loading: some View {
+        DessertDetailLoadingView()
+    }
+
+    @ViewBuilder
+    private var error: some View {
+        ErrorView(retryCallback: { viewModel.fetchDessertDetails() })
     }
 }
 

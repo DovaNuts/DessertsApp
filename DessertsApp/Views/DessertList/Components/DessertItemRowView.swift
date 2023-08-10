@@ -11,7 +11,7 @@ struct DessertItemRowView: View {
 
     @ViewBuilder
     private var content: some View {
-        HStack(spacing: 20) {
+        HStack(spacing: Spacing.spacing5x) {
             nameText
             Spacer()
             thumbnailImage
@@ -30,11 +30,11 @@ struct DessertItemRowView: View {
     private var thumbnailImage: some View {
         CachedAsyncImage(urlString: imageUrl)
             .aspectRatio(contentMode: .fit)
-            .frame(height: 100)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(RoundedRectangle(cornerRadius: 16)
+            .frame(height: Sizing.sizing50x)
+            .clipShape(RoundedRectangle(cornerRadius: Radius.image))
+            .overlay(RoundedRectangle(cornerRadius: Radius.image)
                 .stroke(Color.secondary.opacity(0.2), lineWidth: 1))
-            .shadow(color: Color.highlight.opacity(0.1), radius: 8, x: 0, y: 4)
+            .shadow(color: Color.highlight.opacity(0.1), radius: Radius.shadow, x: 0, y: 4)
     }
 }
 

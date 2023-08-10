@@ -8,6 +8,7 @@ class DessertListViewModel: ObservableObject {
     @Published var searchText: String = ""
 
     @Published var loading: Bool = true
+    @Published var hasError: Bool = false
 
     private var cancellables: Set<AnyCancellable> = []
 
@@ -28,21 +29,28 @@ class DessertListViewModel: ObservableObject {
         fetchDesserts()
     }
 
-    private func fetchDesserts(networkManager: NetworkManager = .shared) {
+    func fetchDesserts(networkManager: NetworkManager = .shared) {
+        hasError = false
         loading = true
 
         networkManager.fetchDesserts()
             .receive(on: DispatchQueue.main)
-            .sink { completion in
-                if case .failure(let error) = completion {
-                    print("Failed to fetch desserts: \(error)")
-                }
-            } receiveValue: { [weak self] receivedValue in
-                self?.desserts = receivedValue.meals.map { dessert in
+            .timeout(10, scheduler: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
                     self?.loading = false
-                    return Dessert(name: dessert.strMeal, image: dessert.strMealThumb, mealID: dessert.idMeal)
-                }.sorted { $0.name < $1.name }
-            }
+
+                    if case .failure(let error) = completion {
+                        self?.hasError = true
+                        print("Failed to fetch desserts: \(error)")
+                    }
+                },
+                receiveValue: { [weak self] receivedValue in
+                    self?.desserts = receivedValue.meals.map { dessert in
+                        return Dessert(name: dessert.strMeal, image: dessert.strMealThumb, mealID: dessert.idMeal)
+                    }.sorted { $0.name < $1.name }
+                }
+            )
             .store(in: &cancellables)
     }
 }

@@ -23,17 +23,20 @@ class DessertDetailViewModel: ObservableObject {
         networkManager.fetchMealDetails(withID: id)
             .receive(on: DispatchQueue.main)
             .timeout(.seconds(5), scheduler: DispatchQueue.main)
-            .sink { [weak self] completion in
-                if case .failure(let error) = completion {
+            .sink(
+                receiveCompletion: { [weak self] completion in
                     self?.loading = false
-                    self?.hasError = true
-                    print("Failed to fetch dessert details: \(error)")
+
+                    if case .failure(let error) = completion {
+                        self?.hasError = true
+                        print("Failed to fetch dessert details: \(error)")
+                    }
+                },
+                receiveValue: { [weak self] receivedValue in
+                    guard let dessertDetails = receivedValue.meals.first else { return }
+                    self?.dessert = DessertDetails(from: dessertDetails)
                 }
-            } receiveValue: { [weak self] receivedValue in
-                guard let dessertDetails = receivedValue.meals.first else { return }
-                self?.loading = false
-                self?.dessert = DessertDetails(from: dessertDetails)
-            }
+            )
             .store(in: &cancellables)
     }
 }

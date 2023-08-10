@@ -1,14 +1,9 @@
 import SwiftUI
 
-public struct CornerRadius {
+public struct Radius {
     private init() {}
 }
-public struct EGDuration {
-    private init() {}
-}
-public struct EGEasing {
-    private init() {}
-}
+
 public struct Sizing {
     private init() {}
 }
@@ -16,6 +11,84 @@ public struct Spacing {
     private init() {}
 }
 
+// MARK: - Radius
+public extension Radius {
+    static var image: CGFloat {
+        return 16
+    }
+
+    static var pill: CGFloat {
+        return 15
+    }
+
+    static var placeholder: CGFloat {
+        return 6
+    }
+
+    static var button: CGFloat {
+        return 20
+    }
+
+    static var shadow: CGFloat {
+        return 8
+    }
+}
+
+// MARK: - Sizing
+public extension Sizing {
+    static var sizing10x: CGFloat {
+        return 20
+    }
+
+    static var sizing15x: CGFloat {
+        return 30
+    }
+
+    static var sizing20x: CGFloat {
+        return 40
+    }
+
+    static var sizing25x: CGFloat {
+        return 50
+    }
+
+    static var sizing50x: CGFloat {
+        return 100
+    }
+
+    static var sizing75x: CGFloat {
+        return 150
+    }
+
+    static var sizing100x: CGFloat {
+        return 200
+    }
+
+    static var sizing125x: CGFloat {
+        return 250
+    }
+
+    static var sizing175x: CGFloat {
+        return 350
+    }
+}
+
+// MARK: - Spacing
+public extension Spacing {
+    static var spacing3x: CGFloat {
+        return 6
+    }
+
+    static var spacing5x: CGFloat {
+        return 10
+    }
+
+    static var spacing10x: CGFloat {
+        return 20
+    }
+}
+
+// MARK: - Color
 public extension Color {
     static var isDarkMode: Bool {
         @AppStorage("isDarkMode") var isDarkMode = false
@@ -42,15 +115,11 @@ public extension Color {
         return isDarkMode ? subtextDark : subtextLight
     }
 
-    static var secondary: Color {
-        return isDarkMode ? secondaryDark: secondaryLight
-    }
-
     static var placeholder: Color {
         return isDarkMode ? placeholderDark : placeholderLight
     }
 
-    // MARK: - Light
+    // Light
     private static var backgroundLight: Color {
         return Color(hex: "#FFF5E1")
     }
@@ -76,10 +145,10 @@ public extension Color {
     }
 
     private static var placeholderLight: Color {
-        return Color(hex: "#EDEAE5")
+        return Color(hex: "#ffeac7")
     }
 
-    // MARK: - Dark
+    // Dark
     private static var backgroundDark: Color {
         return Color(hex: "#1E1E1E")
     }
@@ -106,11 +175,5 @@ public extension Color {
 
     private static var placeholderDark: Color {
         return Color(hex: "#3D3D3D")
-    }
-}
-
-public extension Spacing {
-    static var listItemSpacingBetween: CGFloat {
-        return 5
     }
 }

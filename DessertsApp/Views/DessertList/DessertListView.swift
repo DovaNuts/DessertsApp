@@ -22,6 +22,8 @@ struct DessertListView: View {
     private var content: some View {
         if viewModel.loading {
             loading
+        } else if viewModel.hasError {
+            error
         } else {
             dessertList
         }
@@ -74,6 +76,11 @@ struct DessertListView: View {
             DessertItemRowLoadingView()
             DessertItemRowLoadingView()
         }
+    }
+
+    @ViewBuilder
+    private var error: some View {
+        ErrorView(retryCallback: { viewModel.fetchDesserts() })
     }
 }
 
