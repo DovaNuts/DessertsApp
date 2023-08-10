@@ -17,51 +17,82 @@ public struct Spacing {
 }
 
 public extension Color {
+    static var isDarkMode: Bool {
+        @AppStorage("isDarkMode") var isDarkMode = false
+        return isDarkMode
+    }
+
     static var background: Color {
+        return isDarkMode ? backgroundDark : backgroundLight
+    }
+
+    static var button: Color {
+        return isDarkMode ? buttonDark : buttonLight
+    }
+
+    static var highlight: Color {
+        return isDarkMode ? highlightDark : highlightLight
+    }
+
+    static var text: Color {
+        return isDarkMode ? textDark : textLight
+    }
+
+    static var subtext: Color {
+        return isDarkMode ? subtextDark : subtextLight
+    }
+
+    static var secondary: Color {
+        return isDarkMode ? secondaryDark: secondaryLight
+    }
+
+    // MARK: - Light
+    private static var backgroundLight: Color {
         return Color(hex: "#FFF5E1")
     }
-    
-    static var button: Color {
+
+    private static var buttonLight: Color {
         return Color(hex: "#C72257")
     }
-    
-    static var highlight: Color {
-        return Color(hex: "#C72257")
+
+    private static var highlightLight: Color {
+        return Color(hex: "EB5081")
     }
-    
-    static var text: Color {
+
+    private static var textLight: Color {
         return Color(hex: "#4A2A20")
     }
-    
-    static var subtext: Color {
-        return Color(hex: "#EB5081")
+
+    private static var subtextLight: Color {
+        return Color(hex: "#C72257")
     }
-    
-    static var secondary: Color {
+
+    private static var secondaryLight: Color {
         return Color(hex: "#FFB389")
     }
-    
-    static var backgroundDark: Color {
+
+    // MARK: - Dark
+    private static var backgroundDark: Color {
         return Color(hex: "#1E1E1E")
     }
-    
-    static var buttonDark: Color {
+
+    private static var buttonDark: Color {
         return Color(hex: "#FF6A8D")
     }
-    
-    static var highlightDark: Color {
-        return Color(hex: "#FF8BA0")
-    }
-    
-    static var textDark: Color {
-        return Color(hex: "#EDEDED")
-    }
-    
-    static var subtextDark: Color {
+
+    private static var highlightDark: Color {
         return Color(hex: "#EB5081")
     }
-    
-    static var secondaryDark: Color {
+
+    private static var textDark: Color {
+        return Color(hex: "#EDEDED")
+    }
+
+    private static var subtextDark: Color {
+        return Color(hex: "#FF8BA0")
+    }
+
+    private static var secondaryDark: Color {
         return Color(hex: "#8A5B57")
     }
 }

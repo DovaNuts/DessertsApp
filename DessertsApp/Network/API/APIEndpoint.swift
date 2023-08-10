@@ -3,15 +3,15 @@ import Foundation
 enum APIEndpoint {
     case getDesserts
     case getMealDetails(id: String)
-    
+
     var scheme: String {
         return URLProvider.scheme.rawValue
     }
-    
+
     var host: String {
         return URLProvider.host.rawValue
     }
-    
+
     var path: String {
         switch self {
         case .getDesserts:
@@ -20,7 +20,7 @@ enum APIEndpoint {
             return URLProvider.mealLookUpEndpoint.rawValue
         }
     }
-    
+
     var queryItem: URLQueryItem {
         switch self {
         case .getDesserts:
@@ -29,7 +29,7 @@ enum APIEndpoint {
             return URLQueryItem(name: "i", value: id)
         }
     }
-    
+
     var url: URL? {
         var components = URLComponents()
         components.scheme = scheme

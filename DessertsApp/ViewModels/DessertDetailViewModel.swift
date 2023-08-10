@@ -3,11 +3,15 @@ import Foundation
 
 class DessertDetailViewModel: ObservableObject {
     @Published var dessert: DessertDetails?
-    
+
     private var cancellables: Set<AnyCancellable> = []
-    
+
     init(id: String) {
-        NetworkManager.instance.fetchMealDetails(withID: id)
+        fetchDessertDetails(id: id)
+    }
+
+    private func fetchDessertDetails(id: String, networkManager: NetworkManager = .shared) {
+        networkManager.fetchMealDetails(withID: id)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 if case .failure(let error) = completion {

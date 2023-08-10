@@ -1,15 +1,15 @@
 import Combine
-import Foundation
 
 class NetworkManager {
-    static let instance = NetworkManager()
+    static let shared = NetworkManager()
+
     private let apiClient = APIClient()
-    
-    func fetchDesserts() -> AnyPublisher<APIMeals, Error> {
+
+    func fetchDesserts() -> AnyPublisher<MealsDTO, Error> {
         return apiClient.request(APIEndpoint.getDesserts)
     }
 
-    func fetchMealDetails(withID id: String) -> AnyPublisher<APIMealsDetails, Error> {
+    func fetchMealDetails(withID id: String) -> AnyPublisher<MealDetailsDTO, Error> {
         return apiClient.request(APIEndpoint.getMealDetails(id: id))
     }
 }

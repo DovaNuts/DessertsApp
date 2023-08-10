@@ -1,20 +1,4 @@
-import Foundation
-
-struct APIMeals: Codable {
-    var meals: [APIDessert]
-}
-
-struct APIMealsDetails: Codable {
-    var meals: [APIDessertDetails]
-}
-
-struct APIDessert: Codable {
-    var strMeal: String
-    var strMealThumb: String
-    var idMeal: String
-}
-
-struct APIDessertDetails: Codable {
+struct DessertDetailsDTO: Codable {
     let idMeal: String
     let strMeal: String
     let strDrinkAlternate: String?
@@ -22,7 +6,7 @@ struct APIDessertDetails: Codable {
     let strInstructions: String
     let strMealThumb: String
     let strTags: String?
-    
+
     let strIngredient1: String?
     let strIngredient2: String?
     let strIngredient3: String?
@@ -43,7 +27,7 @@ struct APIDessertDetails: Codable {
     let strIngredient18: String?
     let strIngredient19: String?
     let strIngredient20: String?
-    
+
     let strMeasure1: String?
     let strMeasure2: String?
     let strMeasure3: String?
@@ -64,18 +48,18 @@ struct APIDessertDetails: Codable {
     let strMeasure18: String?
     let strMeasure19: String?
     let strMeasure20: String?
-    
-    var ingredientsList: [APIIngredient] {
+
+    var ingredientsList: [IngredientDTO] {
         let names = extractProperties(prefix: "strIngredient")
         let measures = extractProperties(prefix: "strMeasure")
-        
-        return Array(zip(names, measures)).map { APIIngredient(name: $0.0, measure: $0.1) }
+
+        return Array(zip(names, measures)).map { IngredientDTO(name: $0.0, measure: $0.1) }
     }
-    
+
     private func extractProperties(prefix: String) -> [String] {
         let mirror = Mirror(reflecting: self)
         var results: [String] = []
-        
+
         for child in mirror.children {
             if let label = child.label, label.hasPrefix(prefix), let value = child.value as? String, !value.isEmpty {
                 results.append(value)
@@ -83,9 +67,4 @@ struct APIDessertDetails: Codable {
         }
         return results
     }
-}
-
-struct APIIngredient {
-    let name: String
-    let measure: String
 }

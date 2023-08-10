@@ -9,13 +9,8 @@ struct DessertDetails {
     let ingredients: [Ingredient]
 }
 
-struct Ingredient {
-    let name: String
-    let measure: String
-}
-
 extension DessertDetails {
-    init(from apiDessertDetails: APIDessertDetails) {
+    init(from apiDessertDetails: DessertDetailsDTO) {
         self.id = apiDessertDetails.idMeal
         self.name = apiDessertDetails.strMeal
         self.instructions = apiDessertDetails.strInstructions
