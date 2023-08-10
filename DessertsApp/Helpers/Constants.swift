@@ -46,13 +46,17 @@ public extension Color {
         return isDarkMode ? secondaryDark: secondaryLight
     }
 
+    static var placeholder: Color {
+        return isDarkMode ? placeholderDark : placeholderLight
+    }
+
     // MARK: - Light
     private static var backgroundLight: Color {
         return Color(hex: "#FFF5E1")
     }
 
     private static var buttonLight: Color {
-        return Color(hex: "#C72257")
+        return Color(hex: "#FFC2A2")
     }
 
     private static var highlightLight: Color {
@@ -71,13 +75,17 @@ public extension Color {
         return Color(hex: "#FFB389")
     }
 
+    private static var placeholderLight: Color {
+        return Color(hex: "#EDEAE5")
+    }
+
     // MARK: - Dark
     private static var backgroundDark: Color {
         return Color(hex: "#1E1E1E")
     }
 
     private static var buttonDark: Color {
-        return Color(hex: "#FF6A8D")
+        return Color(hex: "#8A4A30")
     }
 
     private static var highlightDark: Color {
@@ -94,6 +102,10 @@ public extension Color {
 
     private static var secondaryDark: Color {
         return Color(hex: "#8A5B57")
+    }
+
+    private static var placeholderDark: Color {
+        return Color(hex: "#3D3D3D")
     }
 }
 

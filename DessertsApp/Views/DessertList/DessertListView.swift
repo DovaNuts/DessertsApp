@@ -20,6 +20,15 @@ struct DessertListView: View {
 
     @ViewBuilder
     private var content: some View {
+        if viewModel.loading {
+            loading
+        } else {
+            dessertList
+        }
+    }
+
+    @ViewBuilder
+    private var dessertList: some View {
         List {
             ForEach(viewModel.searchResults, id: \.id) { dessert in
                 DessertItemRowView(name: dessert.name, imageUrl: dessert.image)
@@ -53,6 +62,17 @@ struct DessertListView: View {
         } label: {
             Text("Clean image cache")
                 .tint(Color.highlight)
+        }
+    }
+
+    @ViewBuilder
+    private var loading: some View {
+        List {
+            DessertItemRowLoadingView()
+            DessertItemRowLoadingView()
+            DessertItemRowLoadingView()
+            DessertItemRowLoadingView()
+            DessertItemRowLoadingView()
         }
     }
 }

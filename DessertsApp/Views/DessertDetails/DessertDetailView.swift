@@ -11,10 +11,20 @@ struct DessertDetailView: View {
 
     var body: some View {
         NavigationView {
-            content
-            .padding(.horizontal)
-            .background(Color.background)
-            .toolbar { ToolbarItem { toolbarCloseButton } }
+            if viewModel.loading {
+                DessertDetailLoadingView()
+                    .padding(.horizontal)
+                    .background(Color.background)
+                    .toolbar { ToolbarItem { toolbarCloseButton } }
+            } else if viewModel.hasError {
+                ErrorView(retryCallback: { viewModel.fetchDessertDetails() })
+                    .toolbar { ToolbarItem { toolbarCloseButton } }
+            } else {
+                content
+                    .padding(.horizontal)
+                    .background(Color.background)
+                    .toolbar { ToolbarItem { toolbarCloseButton } }
+            }
         }
     }
 

@@ -7,6 +7,8 @@ class DessertListViewModel: ObservableObject {
 
     @Published var searchText: String = ""
 
+    @Published var loading: Bool = true
+
     private var cancellables: Set<AnyCancellable> = []
 
     var searchResults: [Dessert] {
@@ -27,6 +29,8 @@ class DessertListViewModel: ObservableObject {
     }
 
     private func fetchDesserts(networkManager: NetworkManager = .shared) {
+        loading = true
+
         networkManager.fetchDesserts()
             .receive(on: DispatchQueue.main)
             .sink { completion in
@@ -35,6 +39,7 @@ class DessertListViewModel: ObservableObject {
                 }
             } receiveValue: { [weak self] receivedValue in
                 self?.desserts = receivedValue.meals.map { dessert in
+                    self?.loading = false
                     return Dessert(name: dessert.strMeal, image: dessert.strMealThumb, mealID: dessert.idMeal)
                 }.sorted { $0.name < $1.name }
             }
