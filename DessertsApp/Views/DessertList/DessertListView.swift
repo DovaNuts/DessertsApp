@@ -14,8 +14,8 @@ struct DessertListView: View {
                 DessertDetailView(id: selectedDessert.mealID)
                     .background(Color.background)
             }
+            .searchable(text: $viewModel.searchText)
         }
-        .searchable(text: $viewModel.searchText)
     }
 
     @ViewBuilder
