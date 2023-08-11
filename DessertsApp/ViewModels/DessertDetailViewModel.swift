@@ -4,37 +4,38 @@ import Foundation
 class DessertDetailViewModel: ObservableObject {
     @Published var dessert: DessertDetails?
 
-    @Published var loading: Bool = false
-    @Published var hasError: Bool = true
+    private(set) var state: LoadingState = .loading
 
     private var id: String
 
     private var cancellables: Set<AnyCancellable> = []
+    private let networkManager: NetworkManager
 
-    init(id: String) {
+    init(id: String, networkManager: NetworkManager = .shared) {
         self.id = id
+        self.networkManager = networkManager
         fetchDessertDetails()
     }
 
-    func fetchDessertDetails(networkManager: NetworkManager = .shared) {
-        hasError = false
-        loading = true
+    func fetchDessertDetails() {
+        state = .loading
 
         networkManager.fetchMealDetails(withID: id)
             .receive(on: DispatchQueue.main)
-            .timeout(.seconds(5), scheduler: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
-                    self?.loading = false
-
                     if case .failure(let error) = completion {
-                        self?.hasError = true
+                        self?.state = .failed
                         print("Failed to fetch dessert details: \(error)")
                     }
                 },
                 receiveValue: { [weak self] receivedValue in
-                    guard let dessertDetails = receivedValue.meals.first else { return }
+                    guard let dessertDetails = receivedValue.meals.first else {
+                        self?.state = .failed
+                        return
+                    }
                     self?.dessert = DessertDetails(from: dessertDetails)
+                    self?.state = .loaded
                 }
             )
             .store(in: &cancellables)

@@ -14,18 +14,19 @@ struct DessertListView: View {
                 DessertDetailView(id: selectedDessert.mealID)
                     .background(Color.background)
             }
+            .refreshable {
+                viewModel.fetchDesserts()
+            }
             .searchable(text: $viewModel.searchText)
         }
     }
 
     @ViewBuilder
     private var content: some View {
-        if viewModel.loading {
-            loading
-        } else if viewModel.hasError {
-            error
-        } else {
-            dessertList
+        switch viewModel.state {
+        case .loading: loading
+        case .failed: error
+        case .loaded: dessertList
         }
     }
 

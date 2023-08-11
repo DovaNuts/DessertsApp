@@ -14,6 +14,10 @@ class ImageCache {
         return cache.object(forKey: key as NSString)
     }
 
+    func remove(forKey key: String) {
+        cache.removeObject(forKey: key as NSString)
+    }
+
     func clean() {
         cache.removeAllObjects()
     }

@@ -22,12 +22,10 @@ struct DessertDetailView: View {
 
     @ViewBuilder
     private var content: some View {
-        if viewModel.loading {
-            loading
-        } else if viewModel.hasError {
-            error
-        } else {
-            main
+        switch viewModel.state {
+        case .loading: loading
+        case .failed: error
+        case .loaded: main
         }
     }
 
@@ -48,7 +46,7 @@ struct DessertDetailView: View {
     private var thumbnailImage: some View {
         HStack {
             Spacer()
-            CachedAsyncImage(urlString: viewModel.dessert?.thumbnail.absoluteString ?? "")
+            CachedAsyncImage(urlString: viewModel.dessert?.thumbnail?.absoluteString ?? "")
                 .scaledToFit()
                 .frame(height: Sizing.sizing175x)
                 .cornerRadius(Radius.image)

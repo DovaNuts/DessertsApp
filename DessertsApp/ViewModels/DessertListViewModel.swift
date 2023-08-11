@@ -7,10 +7,10 @@ class DessertListViewModel: ObservableObject {
 
     @Published var searchText: String = ""
 
-    @Published var loading: Bool = true
-    @Published var hasError: Bool = false
+    private(set) var state: LoadingState = .loading
 
     private var cancellables: Set<AnyCancellable> = []
+    private let networkManager: NetworkManager
 
     var searchResults: [Dessert] {
         if searchText.isEmpty {
@@ -20,7 +20,8 @@ class DessertListViewModel: ObservableObject {
         }
     }
 
-    init() {
+    init(networkManager: NetworkManager = .shared) {
+        self.networkManager = networkManager
         fetchDesserts()
     }
 
@@ -29,26 +30,27 @@ class DessertListViewModel: ObservableObject {
         fetchDesserts()
     }
 
-    func fetchDesserts(networkManager: NetworkManager = .shared) {
-        hasError = false
-        loading = true
+    func fetchDesserts() {
+        state = .loading
 
         networkManager.fetchDesserts()
             .receive(on: DispatchQueue.main)
-            .timeout(10, scheduler: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
-                    self?.loading = false
-
                     if case .failure(let error) = completion {
-                        self?.hasError = true
+                        self?.state = .failed
                         print("Failed to fetch desserts: \(error)")
                     }
                 },
                 receiveValue: { [weak self] receivedValue in
+                    guard receivedValue.meals.count > 0 else {
+                        self?.state = .failed
+                        return
+                    }
                     self?.desserts = receivedValue.meals.map { dessert in
                         return Dessert(name: dessert.strMeal, image: dessert.strMealThumb, mealID: dessert.idMeal)
                     }.sorted { $0.name < $1.name }
+                    self?.state = .loaded
                 }
             )
             .store(in: &cancellables)
