@@ -4,7 +4,6 @@ import Foundation
 class DessertListViewModel: ObservableObject {
     @Published var desserts: [Dessert] = []
     @Published var selectedDessert: Dessert?
-
     @Published var searchText: String = ""
 
     private(set) var state: LoadingState = .loading
