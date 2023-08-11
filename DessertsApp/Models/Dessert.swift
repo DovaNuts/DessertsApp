@@ -6,5 +6,4 @@ struct Dessert: Identifiable {
     var name: String
     var image: String
     var mealID: String
-    var uiImage: UIImage? = nil
 }
